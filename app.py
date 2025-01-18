@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, render_template
 import speech_recognition as sr
-
+from pydub import AudioSegment
 app = Flask(__name__)
 
 # Function to convert speech to text
@@ -22,12 +22,16 @@ def index():
 # Route to handle the form and convert speech
 @app.route("/getspeech", methods=["GET", "POST"])
 def speech():
-    convt_text = ""
+
     if request.method == "POST":
         if "audio_file" in request.files:
+
+
             audio_file = request.files["audio_file"]
+            sound = AudioSegment.from_mp3(audio_file)
+            sound.export("file.wav", format="wav")
             # Save the audio file temporarily
-            temp_filename = "temp_audio.wav"
+            temp_filename = "file.wav"
             audio_file.save(temp_filename)
 
             # Convert the audio file to text
@@ -35,7 +39,7 @@ def speech():
 
             # Remove the temporary file after processing
             os.remove(temp_filename)
-
+    
     return render_template("index.html", convt_text=convt_text)
 
 if __name__ == "__main__":
