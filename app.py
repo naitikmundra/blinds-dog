@@ -3,7 +3,8 @@ from flask import Flask, request, render_template
 import speech_recognition as sr
 from pydub import AudioSegment
 import subprocess
-
+import random
+import string
 app = Flask(__name__)
 
 # Function to convert speech to text
@@ -28,17 +29,28 @@ def speech():
     if request.method == "POST":
         if "audio_file" in request.files:
 
+            # Get the current working directory
+            current_dir = os.getcwd()
 
+            # Loop through all files in the directory
+            for file_name in os.listdir(current_dir):
+                if file_name.endswith('.wav'):
+                    file_path = os.path.join(current_dir, file_name)
+                    os.remove(file_path)
+                    print(f'Removed: {file_name}')
             audio_file = request.files["audio_file"]
-            temp_filename = "file.mp3"
+            random_string =  ''.join(random.choices(string.digits, k=10))
+
+            temp_filename = random_string +".mp3"
             audio_file.save(temp_filename)
-            sound = AudioSegment.from_mp3("file.mp3")
-            sound.export("file.wav", format="wav")
+
+            result = subprocess.run(['ffmpeg', '-i', random_string +".mp3",random_string +".wav"])
+
             # Save the audio file temporarily
 
 
             # Convert the audio file to text
-            convt_text = convert_speech_to_text(temp_filename)
+            convt_text = convert_speech_to_text(random_string +".wav")
 
             # Remove the temporary file after processing
             os.remove(temp_filename)

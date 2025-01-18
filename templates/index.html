@@ -113,10 +113,10 @@
         <button class="btn">Start</button>
         <div class="spacer"></div>
     </div>
-    <p>Converted Text will show here: {{ convt_text }}</p>
+    <p id="address" >{{ convt_text }}</p>
 
     <audio id="background-audio">
-        <source src="audio.mp3" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='audio.mp3') }}" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -126,6 +126,8 @@
     </form>
 
     <script>
+        let paragraphText = document.querySelector('#address').textContent;
+        if (paragraphText == "None"){
         const audio = document.getElementById('background-audio');
         const audioForm = document.getElementById('audio-form');
         const audioFileInput = document.getElementById('audio-file');
@@ -182,6 +184,16 @@
                 .catch(error => {
                     console.error('Error accessing audio stream:', error);
                 });
+        }
+        }else{
+          // Function to speak text
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+}
+
+// Example usage
+speakText("You spoke the address to reach as, " + paragraphText);
         }
     </script>
 </body>
