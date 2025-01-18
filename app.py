@@ -21,7 +21,7 @@ def index():
     return render_template("index.html", convt_text=convt_text)
 # Route to handle the form and convert speech
 @app.route("/getspeech", methods=["GET", "POST"])
-def index():
+def speech():
     convt_text = ""
     if request.method == "POST":
         if "audio_file" in request.files:
