@@ -16,7 +16,7 @@ if __name__ == "__main__":
         print(f"Latitude: {latitude}")
         print(f"Longitude: {longitude}")
 
-        # Create a Google Maps URL with the coordinates
+        # a Google Maps URL with the coordinates
         maps_url = f"https://www.google.com/maps?q={latitude},{longitude}"
 
         # Open the URL in the default web browser
